@@ -5,7 +5,6 @@ target/
 !**/src/test/**/target/
 
 ### Spring
-application.properties.comments
 application.properties
 
 ### docker
