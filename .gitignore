@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### Spring
-application.properties
+**/application.properties
 
 ### docker
 docker-compose.yml
