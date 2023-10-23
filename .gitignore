@@ -4,6 +4,13 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Spring
+application.properties.comments
+application.properties
+
+### docker
+docker-compose.yml
+
 ### STS ###
 .apt_generated
 .classpath
