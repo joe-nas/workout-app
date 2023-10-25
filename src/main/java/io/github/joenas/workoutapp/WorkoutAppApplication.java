@@ -1,5 +1,6 @@
 package io.github.joenas.workoutapp;
 
+import com.github.javafaker.Faker;
 import io.github.joenas.workoutapp.user.User;
 import io.github.joenas.workoutapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 @SpringBootApplication
 public class WorkoutAppApplication{
 
+    Faker faker = new Faker();
+
     @Autowired
     UserRepository userRepository;
     public static void main(String[] args) {
@@ -20,9 +23,12 @@ public class WorkoutAppApplication{
 
     @Component
     public class createUserCommandLineRunner implements CommandLineRunner {
+
         @Override
         public void run(String... args) {
-            User user = new User("user");
+            User user = new User(faker.funnyName().name(),
+                    faker.internet().emailAddress(),
+                    faker.internet().uuid());
             userRepository.save(user);
         }
     }

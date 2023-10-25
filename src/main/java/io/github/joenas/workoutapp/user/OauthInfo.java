@@ -5,6 +5,7 @@ public class OauthInfo {
     private String oauthProvider;
     private String oauthId;
 
+
     public OauthInfo() {
     }
 

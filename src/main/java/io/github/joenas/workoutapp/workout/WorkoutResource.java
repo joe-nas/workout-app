@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api")
 public class WorkoutResource {
 
     WorkoutService workoutService;
@@ -34,14 +35,8 @@ public class WorkoutResource {
         return workoutRepository.findAll();
     }
 
-//    @GetMapping("/workouts/{username}")
-//    public ResponseEntity<List<Workout>> getWorkoutsByUsername(@PathVariable String username) {
-//        logger.info("Retrieving workouts for: {}",username);
-//        List<Workout> workouts = workoutRepository.findAllByUsername(username);
-//        return ResponseEntity.status(HttpStatus.OK).body(workouts);
-//    }
 
-    @PostMapping("/workouts/{username}")
+    @PostMapping("/workouts/create")
     public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout) {
         logger.info("Creating workout for: {}",workout.getUsername());
         Workout savedWorkout = workoutRepository.save(workout);
