@@ -13,9 +13,12 @@ import org.springframework.stereotype.Component;
 public class WorkoutAppApplication{
 
     Faker faker = new Faker();
-
-    @Autowired
     UserRepository userRepository;
+
+    public WorkoutAppApplication(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(WorkoutAppApplication.class, args);
 

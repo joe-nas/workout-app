@@ -59,17 +59,17 @@ public class UserResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @PostMapping("/user/{oauthId}/edit")
-    public  ResponseEntity<User> editUser(@PathVariable String oauthId, @RequestBody User updatedUserData){
-        User updatedUser = userRepository.updateUserByOauthId(oauthId, updatedUserData);
-        if (updatedUser == null) {
-            logger.debug("No user with oauthId: {}", oauthId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {
-            logger.debug("User with oauthId {} is: {}", oauthId, updatedUser);
-            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
-        }
-    }
+//    @PostMapping("/user/{oauthId}/edit")
+//    public  ResponseEntity<User> editUser(@PathVariable String oauthId, @RequestBody User updatedUserData){
+//        User updatedUser = userRepository.updateUserByOauthId(oauthId, updatedUserData);
+//        if (updatedUser == null) {
+//            logger.debug("No user with oauthId: {}", oauthId);
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        } else {
+//            logger.debug("User with oauthId {} is: {}", oauthId, updatedUser);
+//            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+//        }
+//    }
 
 }
 
