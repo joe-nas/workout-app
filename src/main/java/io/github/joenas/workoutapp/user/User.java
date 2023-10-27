@@ -1,40 +1,35 @@
 package io.github.joenas.workoutapp.user;
 
+import io.github.joenas.workoutapp.workout.Workout;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.net.URL;
+import java.util.List;
+
 @Document(collection = "users")
+@Getter @Setter @NoArgsConstructor @ToString
 public class User{
 
     @Id
-    private @MongoId String userID;
+    private @MongoId String id;
     @Indexed(unique = true)
     private String oauthId;
     private UserRoles userRole;
     private String username;
     private String email;
+    private Metric metric;
+    private URL profilePictureUrl;
 
-    public String getOauthId() {
-        return oauthId;
-    }
-
-    public void setOauthId(String oauthId) {
-        this.oauthId = oauthId;
-    }
-
-    public UserRoles getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRoles userRole) {
-        this.userRole = userRole;
-    }
-
-
-    public User() {
-    }
+    @DBRef
+    private List<Workout> workouts;
 
     public User(String username, String email, String oauthId) {
 
@@ -42,40 +37,7 @@ public class User{
         this.email = email;
         this.userRole = UserRoles.USER;
         this.oauthId = oauthId;
-    }
-
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userID='" + userID + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        this.metric = Metric.KG;
     }
 
     //    private Set<UserRoles> userRoles;
