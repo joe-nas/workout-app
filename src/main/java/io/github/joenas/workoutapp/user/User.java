@@ -1,13 +1,11 @@
 package io.github.joenas.workoutapp.user;
 
-import io.github.joenas.workoutapp.workout.Workout;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -22,20 +20,17 @@ public class User{
     private @MongoId String id;
     @Indexed(unique = true)
     private String oauthId;
-    private UserRoles userRole;
+    private List<UserRoles> userRoles;
     private String username;
     private String email;
     private Metric metric;
     private URL profilePictureUrl;
 
-    @DBRef
-    private List<Workout> workouts;
-
     public User(String username, String email, String oauthId) {
 
         this.username = username;
         this.email = email;
-        this.userRole = UserRoles.USER;
+        this.userRoles = List.of(UserRoles.USER);
         this.oauthId = oauthId;
         this.metric = Metric.KG;
     }

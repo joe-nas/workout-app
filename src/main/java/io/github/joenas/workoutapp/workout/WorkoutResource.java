@@ -35,10 +35,9 @@ public class WorkoutResource {
         return workoutRepository.findAll();
     }
 
-
     @PostMapping("/workouts/create")
     public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout) {
-        logger.info("Creating workout for: {}",workout.getUsername());
+        logger.info("Creating workout for: {}",workout.getOauthId());
         Workout savedWorkout = workoutRepository.save(workout);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }

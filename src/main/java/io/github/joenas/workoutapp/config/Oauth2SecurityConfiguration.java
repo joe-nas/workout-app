@@ -14,12 +14,32 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class Oauth2SecurityConfiguration {
 
+//    private final UserService userService;
+//    private JwtDecoder jwtDecoder;
+//    private JwtAuthenticationConverter jwtAuthenticationConverter;
+
+//    public Oauth2SecurityConfiguration(UserService userService, JwtDecoder jwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter) {
+//        this.userService = userService;
+//        this.jwtDecoder = jwtDecoder;
+//        this.jwtAuthenticationConverter = jwtAuthenticationConverter;
+//    }
+
+
     // these are ant patterns, which is the default way of matching urls in spring security
     public static final String[] ENDPOINTS_WHITELIST = {
             "/",
             "/api/user/**",
             "/api/workouts/**",
     };
+
+//    public JwtAuthenticationConverter jwtAuthenticationConverter(){
+//        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+//        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+//            List<GrantedAuthority> roles = userService.getUserRoles(jwt.getClaimAsString("sub"));
+//            return roles;
+//        });
+//        return converter;
+//    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,6 +48,7 @@ public class Oauth2SecurityConfiguration {
         // all other requests are authenticated using oauth2
         http.authorizeHttpRequests((requests) ->
                 requests
+//                        .anyRequest().permitAll());
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                         .anyRequest().authenticated());
         http.csrf(csrf->csrf.disable());

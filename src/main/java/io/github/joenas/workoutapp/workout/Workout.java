@@ -1,5 +1,6 @@
 package io.github.joenas.workoutapp.workout;
 
+import io.github.joenas.workoutapp.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,12 +8,12 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Document(collection = "workouts")
 @Getter
@@ -23,7 +24,9 @@ public class Workout {
 
     @Id
     private @MongoId String id;
-    private String username;
+    @DBRef
+    private User user;
+    private String oauthId;
     private String workoutName;
     @CreatedDate
     private Date dateCreated;
@@ -31,9 +34,8 @@ public class Workout {
     private Date dateModified;
     private List<Exercise> exercises;
 
-    public Workout(String username, String workoutName, Date dateCreated, List<Exercise> exercises) {
-        this.id = UUID.randomUUID().toString();
-        this.username = username;
+    public Workout(String workoutName, String oauthId, Date dateCreated, List<Exercise> exercises) {
+        this.oauthId = oauthId;
         this.workoutName = workoutName;
         this.dateCreated = dateCreated;
         this.exercises = exercises;

@@ -1,20 +1,44 @@
 package io.github.joenas.workoutapp.user;
 
-//@Service
+import io.github.joenas.workoutapp.workout.Workout;
+import io.github.joenas.workoutapp.workout.WorkoutRepository;
+import lombok.Getter;
+import lombok.Setter;
+import org.slf4j.Logger;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@Getter
+@Setter
 public class UserService {
-//
-//    private final UserRepository userRepository;
-//    private final Faker faker = new Faker();
-//
-//    public UserService(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-//
-//    public List<User> getAllUsers() {
-//        return userRepository.findAll();
-//    }
-//
 
+    private UserRepository userRepository;
+    private WorkoutRepository workoutRepository;
+
+
+    public List<GrantedAuthority> getUserRoles(String oauthId) {
+        User user = userRepository.findByOauthId(oauthId);
+        return user.getUserRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .collect(Collectors.toList());
+    }
+
+    public UserService(UserRepository userRepository, WorkoutRepository workoutRepository) {
+        this.userRepository = userRepository;
+        this.workoutRepository = workoutRepository;
+    }
+
+    Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
+
+    public Workout saveWorkout(Workout workout, String oauthId) {
+        User user = userRepository.findByOauthId(oauthId);
+        workout.setUser(user);
+        workoutRepository.save(workout);
+        return workout;
+    }
 }
-
-

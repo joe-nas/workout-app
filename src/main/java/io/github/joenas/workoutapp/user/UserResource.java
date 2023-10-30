@@ -1,11 +1,9 @@
 package io.github.joenas.workoutapp.user;
 
 import io.github.joenas.workoutapp.workout.Workout;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +15,11 @@ public class UserResource {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserResource.class);
     UserRepository userRepository;
+    UserService userService;
 
-    public UserResource(UserRepository userRepository) {
+    public UserResource(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping("/allusers")
@@ -44,6 +44,14 @@ public class UserResource {
     @GetMapping("/user/{oauthId}/workouts")
     public String retrieveWorkoutsByOauthId(@PathVariable String oauthId){
         return "Here are workouts from user with oauthId: " + oauthId;
+    }
+
+    @PostMapping("/user/{oauthId}/workouts")
+    public String createUserWorkout(@PathVariable String oauthId, @RequestBody Workout workout){
+        logger.debug("Creating workout for user with oauthId: {}", oauthId);
+        logger.debug("Workout: {}", workout.toString());
+        Workout newWorkout = userService.saveWorkout(workout, oauthId);
+        return "Creating workout for user with oauthId: " + oauthId + " and workout: " + newWorkout.toString();
     }
 
     @PostMapping("/user")
