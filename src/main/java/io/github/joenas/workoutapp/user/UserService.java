@@ -21,12 +21,12 @@ public class UserService {
     private WorkoutRepository workoutRepository;
 
 
-    public List<GrantedAuthority> getUserRoles(String oauthId) {
-        User user = userRepository.findByOauthId(oauthId);
-        return user.getUserRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toList());
-    }
+//    publicublic List<GrantedAuthority> getUserRolesles(String oauthId) {
+//        User user = userRepository.findByOauthId(oauthId);
+//        return user.getUserRoles().stream()
+//                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+//                .collect(Collectors.toList());
+//    }
 
     public UserService(UserRepository userRepository, WorkoutRepository workoutRepository) {
         this.userRepository = userRepository;

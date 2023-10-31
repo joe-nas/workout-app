@@ -1,58 +1,58 @@
 package io.github.joenas.workoutapp.config;
 
+import io.github.joenas.workoutapp.user.UserRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class Oauth2SecurityConfiguration {
 
-//    private final UserService userService;
-//    private JwtDecoder jwtDecoder;
-//    private JwtAuthenticationConverter jwtAuthenticationConverter;
 
-//    public Oauth2SecurityConfiguration(UserService userService, JwtDecoder jwtDecoder, JwtAuthenticationConverter jwtAuthenticationConverter) {
-//        this.userService = userService;
-//        this.jwtDecoder = jwtDecoder;
-//        this.jwtAuthenticationConverter = jwtAuthenticationConverter;
-//    }
+    private final UserRepository userRepository;
+    private final JwtDecoder jwtDecoder;
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    String jwkSetUri;
 
 
-    // these are ant patterns, which is the default way of matching urls in spring security
+
     public static final String[] ENDPOINTS_WHITELIST = {
             "/",
             "/api/user/**",
             "/api/workouts/**",
     };
 
-//    public JwtAuthenticationConverter jwtAuthenticationConverter(){
-//        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-//        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-//            List<GrantedAuthority> roles = userService.getUserRoles(jwt.getClaimAsString("sub"));
-//            return roles;
-//        });
-//        return converter;
-//    }
+    public Oauth2SecurityConfiguration(UserRepository userRepository, JwtDecoder jwtDecoder) {
+        this.userRepository = userRepository;
+        this.jwtDecoder = jwtDecoder;
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // in spring boot the default request matcher uses ant patterns
         // requests matched (in whitelist) are not authenticated
         // all other requests are authenticated using oauth2
-        http.authorizeHttpRequests((requests) ->
-                requests
-//                        .anyRequest().permitAll());
-                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                        .anyRequest().authenticated());
-        http.csrf(csrf->csrf.disable());
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+        http.
+                authorizeHttpRequests(
+                        (requests) -> requests
+                                .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+                                .anyRequest().authenticated());
+        http.csrf(csrf -> csrf.disable());
+        http.addFilterBefore(new CustomJwtAuthenticationFilter(jwtDecoder, userRepository), FilterSecurityInterceptor.class);
+//        http.oauth2ResourceServer(oauth2 -> oauth2
+//                .jwt(Customizer.withDefaults()));
         return http.build();
     }
 
@@ -63,11 +63,12 @@ public class Oauth2SecurityConfiguration {
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("HEAD","GET", "POST", "PUT", "DELETE", "PATCH")
-                        .allowedHeaders("Accept", "Origin","Access-Control-Allow-Origin", "Content-Type", "Depth", "User-Agent", "If-Modified-Since,",
+                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
+                        .allowedHeaders("Accept", "Origin", "Access-Control-Allow-Origin", "Content-Type", "Depth", "User-Agent", "If-Modified-Since,",
                                 "Cache-Control", "Authorization", "X-Req", "X-File-Size", "X-Requested-With", "X-File-Name")
                         .allowCredentials(true);
             }
         };
     }
+
 }
