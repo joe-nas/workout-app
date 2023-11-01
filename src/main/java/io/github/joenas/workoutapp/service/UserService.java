@@ -1,16 +1,15 @@
-package io.github.joenas.workoutapp.user;
+package io.github.joenas.workoutapp.service;
 
-import io.github.joenas.workoutapp.workout.Workout;
-import io.github.joenas.workoutapp.workout.WorkoutRepository;
+import io.github.joenas.workoutapp.model.user.User;
+import io.github.joenas.workoutapp.repository.UserRepository;
+import io.github.joenas.workoutapp.model.workout.Workout;
+import io.github.joenas.workoutapp.repository.WorkoutRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Getter

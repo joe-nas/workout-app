@@ -1,6 +1,7 @@
-package io.github.joenas.workoutapp.workout;
+package io.github.joenas.workoutapp.repository;
 
-import io.github.joenas.workoutapp.user.User;
+import io.github.joenas.workoutapp.model.user.User;
+import io.github.joenas.workoutapp.model.workout.Workout;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

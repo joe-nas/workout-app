@@ -1,6 +1,7 @@
-package io.github.joenas.workoutapp.workout;
+package io.github.joenas.workoutapp.model.workout;
 
-import io.github.joenas.workoutapp.user.User;
+import io.github.joenas.workoutapp.model.workout.Exercise;
+import io.github.joenas.workoutapp.model.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,6 +1,9 @@
-package io.github.joenas.workoutapp.workout;
+package io.github.joenas.workoutapp.resource;
 
 
+import io.github.joenas.workoutapp.model.workout.Workout;
+import io.github.joenas.workoutapp.repository.WorkoutRepository;
+import io.github.joenas.workoutapp.service.WorkoutService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

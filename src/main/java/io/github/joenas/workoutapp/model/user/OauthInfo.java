@@ -1,4 +1,4 @@
-package io.github.joenas.workoutapp.user;
+package io.github.joenas.workoutapp.model.user;
 
 public class OauthInfo {
 

@@ -1,9 +1,8 @@
 package io.github.joenas.workoutapp;
 
 import com.github.javafaker.Faker;
-import io.github.joenas.workoutapp.user.User;
-import io.github.joenas.workoutapp.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.joenas.workoutapp.model.user.User;
+import io.github.joenas.workoutapp.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

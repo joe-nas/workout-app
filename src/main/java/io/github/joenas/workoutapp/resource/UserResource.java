@@ -1,21 +1,17 @@
-package io.github.joenas.workoutapp.user;
+package io.github.joenas.workoutapp.resource;
 
-import io.github.joenas.workoutapp.workout.Workout;
-import jakarta.annotation.security.RolesAllowed;
-import org.apache.tomcat.util.http.parser.Authorization;
+import io.github.joenas.workoutapp.model.user.User;
+import io.github.joenas.workoutapp.repository.UserRepository;
+import io.github.joenas.workoutapp.service.UserService;
+import io.github.joenas.workoutapp.model.workout.Workout;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:3000")

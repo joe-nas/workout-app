@@ -1,4 +1,4 @@
-package io.github.joenas.workoutapp.workout;
+package io.github.joenas.workoutapp.model.workout;
 
 public class WorkoutSet {
 

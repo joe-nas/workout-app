@@ -1,5 +1,8 @@
-package io.github.joenas.workoutapp.workout;
+package io.github.joenas.workoutapp.service;
 
+import io.github.joenas.workoutapp.model.workout.Exercise;
+import io.github.joenas.workoutapp.model.workout.Workout;
+import io.github.joenas.workoutapp.model.workout.WorkoutSet;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

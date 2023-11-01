@@ -1,17 +1,12 @@
-package io.github.joenas.workoutapp.user;
+package io.github.joenas.workoutapp.model.user;
 
-import io.github.joenas.workoutapp.workout.Workout;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 
 @Document(collection = "users")

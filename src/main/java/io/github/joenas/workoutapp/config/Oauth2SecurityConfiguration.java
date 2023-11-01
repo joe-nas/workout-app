@@ -1,9 +1,7 @@
 package io.github.joenas.workoutapp.config;
 
-import io.github.joenas.workoutapp.user.UserRepository;
+import io.github.joenas.workoutapp.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,13 +21,13 @@ public class Oauth2SecurityConfiguration {
 
     private final UserRepository userRepository;
     private final JwtDecoder jwtDecoder;
-    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
-    String jwkSetUri;
+
 
 
 
     public static final String[] ENDPOINTS_WHITELIST = {
             "/",
+            "/api/exercisedb/**",
             "/api/user/**",
             "/api/workouts/**",
     };

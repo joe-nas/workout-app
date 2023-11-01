@@ -1,7 +1,7 @@
 package io.github.joenas.workoutapp.config;
 
-import io.github.joenas.workoutapp.user.User;
-import io.github.joenas.workoutapp.user.UserRepository;
+import io.github.joenas.workoutapp.model.user.User;
+import io.github.joenas.workoutapp.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -27,21 +28,18 @@ import java.util.List;
  * SecurityContextHolder for further processing of the request.
  */
 
+@Component
 public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(CustomJwtAuthenticationFilter.class);
 
-
+    public JwtValidationService jwtValidationService;
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
-
-
     public CustomJwtAuthenticationFilter(JwtDecoder jwtDecoder, UserRepository userRepository) {
-
         this.jwtDecoder = jwtDecoder;
         this.userRepository = userRepository;
     }
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
