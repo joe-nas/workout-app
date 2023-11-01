@@ -21,13 +21,6 @@ public class UserService {
     private WorkoutRepository workoutRepository;
 
 
-//    publicublic List<GrantedAuthority> getUserRolesles(String oauthId) {
-//        User user = userRepository.findByOauthId(oauthId);
-//        return user.getUserRoles().stream()
-//                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-//                .collect(Collectors.toList());
-//    }
-
     public UserService(UserRepository userRepository, WorkoutRepository workoutRepository) {
         this.userRepository = userRepository;
         this.workoutRepository = workoutRepository;
@@ -40,5 +33,9 @@ public class UserService {
         workout.setUser(user);
         workoutRepository.save(workout);
         return workout;
+    }
+
+    public List<Workout> findWorkoutsByOauthId(String oauthId) {
+        return workoutRepository.findByOauthId(oauthId);
     }
 }

@@ -1,5 +1,6 @@
 package io.github.joenas.workoutapp.user;
 
+import io.github.joenas.workoutapp.workout.Workout;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -38,6 +39,7 @@ public class User{
         this.oauthId = oauthId;
         this.metric = Metric.KG;
     }
+
 
     //    private Set<UserRoles> userRoles;
 //

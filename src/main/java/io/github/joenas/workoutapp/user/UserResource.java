@@ -52,8 +52,10 @@ public class UserResource {
     }
 
     @GetMapping("/user/{oauthId}/workouts")
-    public String retrieveWorkoutsByOauthId(@PathVariable String oauthId) {
-        return "Here are workouts from user with oauthId: " + oauthId;
+    public ResponseEntity<List<Workout>> retrieveWorkoutsByOauthId(@PathVariable String oauthId) {
+        List<Workout> workouts = userService.findWorkoutsByOauthId(oauthId);
+        return ResponseEntity.status(HttpStatus.OK).body(workouts);
+//        return "Here are workouts from user with oauthId: " + oauthId;
     }
 
     @PostMapping("/user/{oauthId}/workouts")

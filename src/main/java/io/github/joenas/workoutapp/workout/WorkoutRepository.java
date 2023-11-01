@@ -10,4 +10,5 @@ import java.util.List;
 public interface WorkoutRepository extends MongoRepository<Workout, String>{
 
     List<Workout> findByUser(User user);
+    List<Workout> findByOauthId(String oauthId);
 }
