@@ -10,8 +10,7 @@ import java.util.List;
 @Repository
 public interface ExerciseDbRepository extends MongoRepository<ExerciseDb, String> {
     @Query("{ '$text': { '$search': ?0 } }")
-    ExerciseDb searchByName(String name);
-
+    List<ExerciseDb> searchByName(String name);
     List<ExerciseDb> findAllByForce(String force);
 
 }
