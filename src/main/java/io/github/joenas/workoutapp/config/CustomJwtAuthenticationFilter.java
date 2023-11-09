@@ -20,29 +20,42 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * This class is a custom implementation of OncePerRequestFilter which extracts JWT token from the Authorization header
- * of the incoming request, decodes it using the JWK set URI provided in the application properties, retrieves the user
- * details from the UserRepository using the 'sub' claim of the JWT and creates a JwtAuthenticationToken object with the
- * decoded JWT, user authorities and OAuth ID. Finally, it sets the created authentication object in the
- * SecurityContextHolder for further processing of the request.
- */
 
+/**
+ * CustomJwtAuthenticationFilter is a filter that intercepts each request once.
+ * It checks if the request contains a JWT token in the Authorization header.
+ * If a token is present, it decodes it and sets the authentication in the SecurityContext.
+ */
 @Component
 public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final Logger logger = org.slf4j.LoggerFactory.getLogger(CustomJwtAuthenticationFilter.class);
-
-    public JwtValidationService jwtValidationService;
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
+
+
+    /**
+     * Constructor for the CustomJwtAuthenticationFilter class.
+     * @param jwtDecoder JwtDecoder instance for JWT token decoding.
+     * @param userRepository UserRepository instance for user data access.
+     */
     public CustomJwtAuthenticationFilter(JwtDecoder jwtDecoder, UserRepository userRepository) {
         this.jwtDecoder = jwtDecoder;
         this.userRepository = userRepository;
     }
 
+    /**
+     * This method is called for every request to check if it contains a JWT token in the Authorization header.
+     * If a token is present, it decodes it and sets the authentication in the SecurityContext.
+     * @param request HttpServletRequest instance.
+     * @param response HttpServletResponse instance.
+     * @param filterChain FilterChain instance.
+     * @throws ServletException if a servlet-specific error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String token = request.getHeader("Authorization");
 
         if (token != null && token.startsWith("Bearer ")) {
@@ -54,7 +67,8 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
                 User user = userRepository.findByOauthId(sub);
 
                 if (user != null && user.getOauthId().equals(sub)) {
-                    Authentication authentication = new JwtAuthenticationToken(jwt, List.of(new SimpleGrantedAuthority("ROLE_USER")), user.getOauthId());
+                    Authentication authentication = new JwtAuthenticationToken(jwt, List.of(
+                            new SimpleGrantedAuthority("ROLE_USER")), user.getOauthId());
                     logger.debug("created authentication object: {}", authentication);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
