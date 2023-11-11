@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -31,16 +32,16 @@ public class Oauth2SecurityConfiguration {
      */
     public static final String[] ENDPOINTS_WHITELIST = {
             "/",
+//            "/api/user/**",
             "/api/stats/**",
             "/api/exercisedb/**",
-            "/api/user/**",
             "/api/workouts/**",
     };
 
-    public static final String[] ALLOWED_ORIGINS = {
-            "http://localhost:3000",
-            "https://iron-delirium.vercel.app"
-    };
+//    public static final String[] ALLOWED_ORIGINS = {
+//            "http://localhost:3000",
+//            "https://iron-delirium.vercel.app"
+//    };
 
     /**
      * Constructor for the OAuth2SecurityConfiguration class.
@@ -71,6 +72,7 @@ public class Oauth2SecurityConfiguration {
                 authorizeHttpRequests(
                         (requests) -> requests
                                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+                                .requestMatchers(RequestMethod.OPTIONS.asHttpMethod()).permitAll()
                                 .anyRequest().authenticated());
         http.csrf(csrf -> csrf.disable());
         http.addFilterBefore(new CustomJwtAuthenticationFilter(jwtDecoder, userRepository), FilterSecurityInterceptor.class);
@@ -92,14 +94,13 @@ public class Oauth2SecurityConfiguration {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(ALLOWED_ORIGINS)
-                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
-                        .allowedHeaders("Accept", "Origin", "Access-Control-Allow-Origin", "Content-Type", "Depth",
-                                "User-Agent", "If-Modified-Since,",
-                                "Cache-Control", "Authorization", "X-Req", "X-File-Size", "X-Requested-With", "X-File-Name")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("Authorization", "Accept", "Origin", "Access-Control-Allow-Origin", "Content-Type", "Depth",
+                                "User-Agent", "If-Modified-Since", "Cache-Control", "X-Req",
+                                "X-File-Size", "X-Requested-With", "X-File-Name")
                         .allowCredentials(true);
             }
         };
     }
-
 }
