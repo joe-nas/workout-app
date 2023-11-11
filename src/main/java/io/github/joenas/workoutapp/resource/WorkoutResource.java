@@ -45,4 +45,11 @@ public class WorkoutResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
 
+    @DeleteMapping("/workouts/delete/{id}")
+    public ResponseEntity<String> deleteWorkout(@PathVariable String id) {
+        logger.info("Deleting workout with id: {}",id);
+        workoutRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted workout with id: " + id);
+    }
+
 }
