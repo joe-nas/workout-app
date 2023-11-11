@@ -27,7 +27,7 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @GetMapping("/allusers")
+    @GetMapping("/user/allusers")
     public List<User> retrieveAllUsers() {
         List<User> users = userRepository.findAll();
         System.out.println(users);
@@ -84,5 +84,13 @@ public class UserResource {
         return "Security test";
     }
 
+    @PutMapping("/user/{oauthId}/profile")
+    @PreAuthorize("hasRole('USER')")
+    public String updateUser(@PathVariable String oauthId, @RequestBody User user) {
+        logger.debug("Updating user with oauthId: {}", oauthId);
+        logger.debug("User: {}", user.toString());
+        User updatedUser = userService.updateUser(user, oauthId);
+        return "Updating user with oauthId: " + oauthId + " and user: " + updatedUser.toString();
+    }
 }
 
