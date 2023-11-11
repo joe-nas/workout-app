@@ -38,10 +38,10 @@ public class Oauth2SecurityConfiguration {
             "/api/workouts/**",
     };
 
-//    public static final String[] ALLOWED_ORIGINS = {
-//            "http://localhost:3000",
-//            "https://iron-delirium.vercel.app"
-//    };
+    public static final String[] ALLOWED_ORIGINS = {
+            "http://localhost:3000",
+            "https://iron-delirium.vercel.app"
+    };
 
     /**
      * Constructor for the OAuth2SecurityConfiguration class.
@@ -94,7 +94,7 @@ public class Oauth2SecurityConfiguration {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins(ALLOWED_ORIGINS)
                         .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("Authorization", "Accept", "Origin", "Access-Control-Allow-Origin", "Content-Type", "Depth",
                                 "User-Agent", "If-Modified-Since", "Cache-Control", "X-Req",
