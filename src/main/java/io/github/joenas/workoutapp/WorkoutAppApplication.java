@@ -1,12 +1,15 @@
 package io.github.joenas.workoutapp;
 
 import com.github.javafaker.Faker;
+import io.github.joenas.workoutapp.model.user.OauthDetails;
 import io.github.joenas.workoutapp.model.user.User;
 import io.github.joenas.workoutapp.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @SpringBootApplication
 public class WorkoutAppApplication{
@@ -30,10 +33,9 @@ public class WorkoutAppApplication{
         public void run(String... args) {
             User user = new User(faker.funnyName().name(),
                     faker.internet().emailAddress(),
-                    faker.internet().uuid());
+                    faker.internet().uuid(),
+                    new OauthDetails("google",faker.number().toString()));
             userRepository.save(user);
         }
     }
-
-
 }

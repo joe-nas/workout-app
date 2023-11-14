@@ -68,7 +68,8 @@ public class UserResource {
                 new User(
                         user.getUsername(),
                         user.getEmail(),
-                        user.getOauthId()
+                        user.getOauthId(),
+                        user.getOauthDetails()
                 )
         );
         logger.debug("Creating user: {}", newUser.toString());

@@ -1,15 +1,15 @@
 package io.github.joenas.workoutapp.model.user;
 
-public class OauthInfo {
+public class OauthDetails {
 
     private String oauthProvider;
     private String oauthId;
 
 
-    public OauthInfo() {
+    public OauthDetails() {
     }
 
-    public OauthInfo(String oauthProvider, String oauthId) {
+    public OauthDetails(String oauthProvider, String oauthId) {
         this.oauthProvider = oauthProvider;
         this.oauthId = oauthId;
     }

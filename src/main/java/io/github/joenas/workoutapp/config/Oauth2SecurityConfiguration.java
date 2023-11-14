@@ -28,22 +28,6 @@ public class Oauth2SecurityConfiguration {
     private final JwtDecoder jwtDecoder;
 
     /**
-     * Whitelist of endpoints that do not require authentication.
-     */
-    public static final String[] ENDPOINTS_WHITELIST = {
-            "/",
-//            "/api/user/**",
-            "/api/stats/**",
-            "/api/exercisedb/**",
-            "/api/workouts/**",
-    };
-
-    public static final String[] ALLOWED_ORIGINS = {
-            "http://localhost:3000",
-            "https://iron-delirium.vercel.app"
-    };
-
-    /**
      * Constructor for the OAuth2SecurityConfiguration class.
      *
      * @param userRepository UserRepository instance for user data access.
@@ -53,6 +37,24 @@ public class Oauth2SecurityConfiguration {
         this.userRepository = userRepository;
         this.jwtDecoder = jwtDecoder;
     }
+
+    /**
+     * Whitelist of endpoints that do not require authentication.
+     */
+    public static final String[] ENDPOINTS_WHITELIST = {
+            "/",
+            "/api/register",
+            "/api/user/**",
+            "/api/stats/**",
+            "/api/exercisedb/**",
+//            "/api/workouts/**",
+    };
+
+    public static final String[] ALLOWED_ORIGINS = {
+            "http://localhost:3000",
+            "https://iron-delirium.vercel.app"
+    };
+
 
     /**
      * Bean for the security filter chain.
