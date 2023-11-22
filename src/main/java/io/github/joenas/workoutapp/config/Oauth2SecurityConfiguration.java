@@ -4,6 +4,7 @@ import io.github.joenas.workoutapp.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,6 +46,8 @@ public class Oauth2SecurityConfiguration {
             "/",
             "/api/register",
             "/api/user/**",
+//            "/api/user/check/**",
+//            "/api/user/create",
             "/api/stats/**",
             "/api/exercisedb/**",
 //            "/api/workouts/**",

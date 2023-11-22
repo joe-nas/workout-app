@@ -62,13 +62,14 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
             token = token.replace("Bearer ", "");
 
             try {
-                Jwt jwt = jwtDecoder.decode(token);
+                Jwt jwt = jwtDecoder.decode(token.toString());
                 String sub = (String) jwt.getClaims().get("sub");
                 User user = userRepository.findByOauthId(sub);
 
                 if (user != null && user.getOauthId().equals(sub)) {
                     Authentication authentication = new JwtAuthenticationToken(jwt, List.of(
-                            new SimpleGrantedAuthority("ROLE_USER")), user.getOauthId());
+//                            new SimpleGrantedAuthority("ROLE_USER")), user.getOauthId());
+                            new SimpleGrantedAuthority(user.getUserRoles().get(0).toString())), user.getOauthId());
                     logger.debug("created authentication object: {}", authentication);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);

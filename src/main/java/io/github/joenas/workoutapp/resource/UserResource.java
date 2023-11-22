@@ -27,7 +27,7 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @GetMapping("/user/allusers")
+//    @GetMapping("/user/allusers")
     public List<User> retrieveAllUsers() {
         List<User> users = userRepository.findAll();
         System.out.println(users);
@@ -49,6 +49,7 @@ public class UserResource {
 
     @GetMapping("/user/{oauthId}/workouts")
     public ResponseEntity<List<Workout>> retrieveWorkoutsByOauthId(@PathVariable String oauthId) {
+        logger.debug("🏋️🏋️🏋️ Finding workouts from user with oauthId: {}", oauthId);
         List<Workout> workouts = userService.findWorkoutsByOauthId(oauthId);
         return ResponseEntity.status(HttpStatus.OK).body(workouts);
 //        return "Here are workouts from user with oauthId: " + oauthId;
@@ -62,8 +63,9 @@ public class UserResource {
         return "Creating workout for user with oauthId: " + oauthId + " and workout: " + newWorkout.toString();
     }
 
-    @PostMapping("/user")
+    @PostMapping("/user/create")
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        logger.debug("🥩🥩🥩 Trying to create user: {}", user.toString());
         User newUser = userRepository.save(
                 new User(
                         user.getUsername(),
@@ -72,8 +74,21 @@ public class UserResource {
                         user.getOauthDetails()
                 )
         );
-        logger.debug("Creating user: {}", newUser.toString());
+        logger.debug("🥩🥩🥩 The newUser is: {}", newUser.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+    @GetMapping("/user/check/{oauthId}")
+    public ResponseEntity<Void> checkIfUserExists(@PathVariable String oauthId) {
+        logger.debug("🦝🦝🦝🐮🐮🐮Checking if user with oauthId: {} exists", oauthId);
+        User user = userRepository.findByOauthId(oauthId);
+        if (user == null) {
+            logger.debug("🦝🦝🦝🦝🦝🦝User with oauthId: {} does not exist", oauthId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            logger.debug("🐮🐮🐮🐮🐮🐮User with oauthId: {} exists", oauthId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
     }
 
 
