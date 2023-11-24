@@ -66,6 +66,11 @@ public class UserResource {
     @PostMapping("/user/create")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         logger.debug("🥩🥩🥩 Trying to create user: {}", user.toString());
+        User userExists = userRepository.findByOauthId(user.getOauthId());
+        if(userExists != null) {
+            logger.debug("🥩🥩🥩 User with oauthId: {} already exists", user.getOauthId());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         User newUser = userRepository.save(
                 new User(
                         user.getUsername(),
