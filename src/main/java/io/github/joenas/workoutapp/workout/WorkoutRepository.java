@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface WorkoutRepository extends MongoRepository<WorkoutModel, String>{
 
-    List<WorkoutModel> findByUser(UserModel user);
     List<WorkoutModel> findByOauthId(String oauthId);
     void deleteById(String id);
 }
