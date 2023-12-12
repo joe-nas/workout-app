@@ -1,5 +1,6 @@
 package io.github.joenas.workoutapp.user;
 
+import io.github.joenas.workoutapp.user.model.Metric;
 import io.github.joenas.workoutapp.workout.model.WorkoutModel;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -97,14 +98,19 @@ public class UserController {
     @PostMapping("/user/create")
     public ResponseEntity<UserModel> createUser(@RequestBody UserModel user) {
         logger.debug("🥩🥩🥩 Trying to create user: {}", user.toString());
+        if (userRepository.findByOauthId(user.getOauthId()) != null) {
+            logger.debug("🥩🥩🥩 User with oauthId: {} already exists", user.getOauthId());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         UserModel newUser = userRepository.save(
-                new UserModel(
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getOauthId(),
-                        user.getOauthDetails()
-                )
-        );
+                UserModel.builder()
+                        .username(user.getUsername())
+                        .email(user.getEmail())
+                        .userRoles(user.getUserRoles())
+                        .metric(Metric.KG)
+                        .oauthId(user.getOauthId())
+                        .oauthDetails(user.getOauthDetails())
+                        .build());
         logger.debug("🥩🥩🥩 The newUser is: {}", newUser.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
