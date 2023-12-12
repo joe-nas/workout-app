@@ -1,10 +1,12 @@
 package io.github.joenas.workoutapp.workout.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class WorkoutSetModel {
 
     private int setNumber;
@@ -21,14 +23,4 @@ public class WorkoutSetModel {
         this.rpe = -1;
     }
 
-    @Override
-    public String toString() {
-        return "WorkoutSet{" +
-                "setNumber=" + setNumber +
-                ", reps=" + reps +
-                ", weight=" + weight +
-                ", rpe=" + rpe +
-                ", isDone=" + isDone +
-                '}';
-    }
 }

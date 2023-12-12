@@ -34,15 +34,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserModel updateUser(UserModel user, java.lang.String oauthId) {
+    public UserModel updateUser(UserModel user, String oauthId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("oauthId").is(oauthId));
 
         Update update = new Update();
         update.set("username", user.getUsername());
         update.set("email", user.getEmail());
-        update.set("profilePictureUrl", user.getMetric());
+        update.set("profilePictureUrl", user.getProfilePictureUrl());
+        update.set("metric", user.getMetric());
 
+        // maybe throw an exception if the user is not found
         return mongoTemplate.findAndModify(query, update, UserModel.class);
     }
 

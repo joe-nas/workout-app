@@ -1,7 +1,15 @@
 package io.github.joenas.workoutapp.workout.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
+@Builder
 public class ExerciseModel {
 
 
@@ -11,29 +19,5 @@ public class ExerciseModel {
     public ExerciseModel(String exerciseName, List<WorkoutSetModel> sets) {
         this.exerciseName = exerciseName;
         this.sets = sets;
-    }
-
-    public String getExerciseName() {
-        return exerciseName;
-    }
-
-    public void setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
-    }
-
-    public List<WorkoutSetModel> getSets() {
-        return sets;
-    }
-
-    public void setSets(List<WorkoutSetModel> sets) {
-        this.sets = sets;
-    }
-
-    @Override
-    public String toString() {
-        return "Exercise{" +
-                "exerciseName='" + exerciseName + '\'' +
-                ", sets=" + sets +
-                '}';
     }
 }
