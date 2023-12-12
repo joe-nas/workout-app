@@ -6,11 +6,7 @@ import java.util.List;
 
 
 public interface UserService {
-
-
-
     UserModel updateUser(UserModel user, String oauthId);
-    WorkoutModel saveWorkout(WorkoutModel workout, String oauthId);
     List<WorkoutModel> findWorkoutsByOauthId(String oauthId);
 
 }

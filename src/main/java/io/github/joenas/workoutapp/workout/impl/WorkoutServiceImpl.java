@@ -1,5 +1,8 @@
 package io.github.joenas.workoutapp.workout.impl;
 
+import io.github.joenas.workoutapp.user.UserModel;
+import io.github.joenas.workoutapp.user.UserRepository;
+import io.github.joenas.workoutapp.workout.WorkoutRepository;
 import io.github.joenas.workoutapp.workout.WorkoutService;
 import io.github.joenas.workoutapp.workout.model.ExerciseModel;
 import io.github.joenas.workoutapp.workout.model.WorkoutModel;
@@ -17,9 +20,19 @@ import java.util.List;
 @Setter
 public class WorkoutServiceImpl implements WorkoutService {
 
+    WorkoutRepository workoutRepository;
+    UserRepository userRepository;
 
     public List<WorkoutModel> getAllWorkouts(){
         return workouts;
+    }
+
+    @Override
+    public WorkoutModel saveWorkout(WorkoutModel workout, String oauthId) {
+            UserModel user = userRepository.findByOauthId(oauthId);
+            workout.setUser(user);
+            workoutRepository.save(workout);
+            return workout;
     }
 
     @Override

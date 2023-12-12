@@ -1,6 +1,7 @@
 package io.github.joenas.workoutapp.user;
 
 import io.github.joenas.workoutapp.user.model.Metric;
+import io.github.joenas.workoutapp.workout.WorkoutService;
 import io.github.joenas.workoutapp.workout.model.WorkoutModel;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -19,17 +20,12 @@ public class UserController {
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
     UserRepository userRepository;
     UserService userService;
+    WorkoutService workoutService;
 
-    public UserController(UserRepository userRepository, UserService userService) {
+    public UserController(UserRepository userRepository, UserService userService, WorkoutService workoutService) {
         this.userRepository = userRepository;
         this.userService = userService;
-    }
-
-//    @GetMapping("/user/allusers")
-    public List<UserModel> retrieveAllUsers() {
-        List<UserModel> users = userRepository.findAll();
-        System.out.println(users);
-        return users;
+        this.workoutService = workoutService;
     }
 
 
@@ -71,7 +67,6 @@ public class UserController {
     }
 
 
-
     /**
      * Endpoint to create a workouts for a user by their OAuth ID.
      *
@@ -83,7 +78,7 @@ public class UserController {
     public String createUserWorkout(@PathVariable String oauthId, @RequestBody WorkoutModel workout) {
         logger.debug("Creating workout for user with oauthId: {}", oauthId);
         logger.debug("Workout: {}", workout.toString());
-        WorkoutModel newWorkout = userService.saveWorkout(workout, oauthId);
+        WorkoutModel newWorkout = workoutService.saveWorkout(workout, oauthId);
         return "Creating workout for user with oauthId: " + oauthId + " and workout: " + newWorkout.toString();
     }
 
@@ -138,7 +133,7 @@ public class UserController {
     // testing Roles
     @GetMapping("/security")
     @PreAuthorize("hasRole('USER')")
-    public String securityTest(Authentication auth){
+    public String securityTest(Authentication auth) {
         logger.debug(userRepository.findByOauthId(auth.getName()).toString());
         logger.debug("Security test: {}", auth);
         return "Security test";

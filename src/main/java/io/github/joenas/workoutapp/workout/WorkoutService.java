@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service
 public interface WorkoutService {
 
     List<WorkoutModel> getAllWorkouts();
+    WorkoutModel saveWorkout(WorkoutModel workout, String oauthId);
     WorkoutModel getWorkoutById(int id);
 }

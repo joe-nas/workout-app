@@ -47,14 +47,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public WorkoutModel saveWorkout(WorkoutModel workout, String oauthId) {
-        UserModel user = userRepository.findByOauthId(oauthId);
-        workout.setUser(user);
-        workoutRepository.save(workout);
-        return workout;
-    }
-
-    @Override
     public List<WorkoutModel> findWorkoutsByOauthId(String oauthId) {
         return workoutRepository.findByOauthId(oauthId);
     }
