@@ -1,7 +1,7 @@
 package io.github.joenas.workoutapp.config;
 
-import io.github.joenas.workoutapp.model.user.User;
-import io.github.joenas.workoutapp.repository.UserRepository;
+import io.github.joenas.workoutapp.user.UserModel;
+import io.github.joenas.workoutapp.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,7 +64,7 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 Jwt jwt = jwtDecoder.decode(token.toString());
                 String sub = (String) jwt.getClaims().get("sub");
-                User user = userRepository.findByOauthId(sub);
+                UserModel user = userRepository.findByOauthId(sub);
 
                 if (user != null && user.getOauthId().equals(sub)) {
                     Authentication authentication = new JwtAuthenticationToken(jwt, List.of(

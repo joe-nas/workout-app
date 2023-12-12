@@ -1,9 +1,7 @@
-package io.github.joenas.workoutapp.resource;
+package io.github.joenas.workoutapp.workout;
 
 
-import io.github.joenas.workoutapp.model.workout.Workout;
-import io.github.joenas.workoutapp.repository.WorkoutRepository;
-import io.github.joenas.workoutapp.service.WorkoutService;
+import io.github.joenas.workoutapp.workout.model.WorkoutModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,33 +13,33 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
-public class WorkoutResource {
+public class WorkoutController {
 
     WorkoutService workoutService;
     WorkoutRepository workoutRepository;
 
-    Logger logger = LoggerFactory.getLogger(WorkoutResource.class);
-    public WorkoutResource(WorkoutService workoutService, WorkoutRepository workoutRepository) {
+    Logger logger = LoggerFactory.getLogger(WorkoutController.class);
+    public WorkoutController(WorkoutService workoutService, WorkoutRepository workoutRepository) {
         this.workoutService = workoutService;
         this.workoutRepository = workoutRepository;
     }
 
 //    Not authenticated
     @GetMapping("/")
-    public List<Workout> testall() {
+    public List<WorkoutModel> testall() {
         return workoutRepository.findAll();
     }
 
 //   Authenticated
     @GetMapping("/workouts")
-    public List<Workout> getAllWorkouts() {
+    public List<WorkoutModel> getAllWorkouts() {
         return workoutRepository.findAll();
     }
 
     @PostMapping("/workouts/create")
-    public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout) {
+    public ResponseEntity<WorkoutModel> createWorkout(@RequestBody WorkoutModel workout) {
         logger.info("Creating workout for: {}",workout.getOauthId());
-        Workout savedWorkout = workoutRepository.save(workout);
+        WorkoutModel savedWorkout = workoutRepository.save(workout);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
 

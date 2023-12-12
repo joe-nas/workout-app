@@ -1,5 +1,8 @@
-package io.github.joenas.workoutapp.model.user;
+package io.github.joenas.workoutapp.user;
 
+import io.github.joenas.workoutapp.user.model.Metric;
+import io.github.joenas.workoutapp.user.model.OauthDetails;
+import io.github.joenas.workoutapp.user.model.UserRoles;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User{
+public class UserModel {
 
     @Id
     private @MongoId String id;
@@ -27,7 +30,7 @@ public class User{
     private URL profilePictureUrl;
     private OauthDetails oauthDetails;
 
-    public User(String username, String email, String oauthId, OauthDetails oauthDetails) {
+    public UserModel(String username, String email, String oauthId, OauthDetails oauthDetails) {
 
         this.username = username;
         this.email = email;

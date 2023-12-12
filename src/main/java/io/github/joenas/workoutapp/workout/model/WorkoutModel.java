@@ -1,7 +1,6 @@
-package io.github.joenas.workoutapp.model.workout;
+package io.github.joenas.workoutapp.workout.model;
 
-import io.github.joenas.workoutapp.model.workout.Exercise;
-import io.github.joenas.workoutapp.model.user.User;
+import io.github.joenas.workoutapp.user.UserModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,21 +20,21 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Workout {
+public class WorkoutModel {
 
     @Id
     private @MongoId String id;
     @DBRef
-    private User user;
+    private UserModel user;
     private String oauthId;
     private String workoutName;
     @CreatedDate
     private Date dateCreated;
     @LastModifiedDate
     private Date dateModified;
-    private List<Exercise> exercises;
+    private List<ExerciseModel> exercises;
 
-    public Workout(String workoutName, String oauthId, Date dateCreated, List<Exercise> exercises) {
+    public WorkoutModel(String workoutName, String oauthId, Date dateCreated, List<ExerciseModel> exercises) {
         this.oauthId = oauthId;
         this.workoutName = workoutName;
         this.dateCreated = dateCreated;

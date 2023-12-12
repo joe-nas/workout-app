@@ -1,9 +1,7 @@
-package io.github.joenas.workoutapp.service;
+package io.github.joenas.workoutapp.user;
 
-import io.github.joenas.workoutapp.model.user.User;
-import io.github.joenas.workoutapp.repository.UserRepository;
-import io.github.joenas.workoutapp.model.workout.Workout;
-import io.github.joenas.workoutapp.repository.WorkoutRepository;
+import io.github.joenas.workoutapp.workout.model.WorkoutModel;
+import io.github.joenas.workoutapp.workout.WorkoutRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -32,18 +30,18 @@ public class UserService {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserService.class);
 
-    public Workout saveWorkout(Workout workout, String oauthId) {
-        User user = userRepository.findByOauthId(oauthId);
+    public WorkoutModel saveWorkout(WorkoutModel workout, String oauthId) {
+        UserModel user = userRepository.findByOauthId(oauthId);
         workout.setUser(user);
         workoutRepository.save(workout);
         return workout;
     }
 
-    public List<Workout> findWorkoutsByOauthId(String oauthId) {
+    public List<WorkoutModel> findWorkoutsByOauthId(String oauthId) {
         return workoutRepository.findByOauthId(oauthId);
     }
 
-    public User updateUser(User user, String oauthId) {
+    public UserModel updateUser(UserModel user, String oauthId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("oauthId").is(oauthId));
 
@@ -52,6 +50,6 @@ public class UserService {
         update.set("email", user.getEmail());
         update.set("profilePictureUrl", user.getMetric());
 
-        return mongoTemplate.findAndModify(query, update, User.class);
+        return mongoTemplate.findAndModify(query, update, UserModel.class);
     }
 }

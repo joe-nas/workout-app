@@ -1,4 +1,4 @@
-package io.github.joenas.workoutapp.model.exercisedb;
+package io.github.joenas.workoutapp.exercisedb;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExerciseDb {
+public class ExerciseDbModel {
 
 
     @Id

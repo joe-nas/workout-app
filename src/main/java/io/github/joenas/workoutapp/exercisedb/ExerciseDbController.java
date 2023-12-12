@@ -1,8 +1,6 @@
-package io.github.joenas.workoutapp.resource;
+package io.github.joenas.workoutapp.exercisedb;
 
 
-import io.github.joenas.workoutapp.model.exercisedb.ExerciseDb;
-import jakarta.annotation.Resource;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -11,25 +9,23 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
-import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/api")
 @RestController
-public class ExerciseDbResource {
+public class ExerciseDbController {
 
     @Autowired
     private MongoTemplate mongoTemplate;
-    private List<String> flatEntries = List.of("force", "mechanic", "equipment", "category");
-    private List<String> arrayEntries = List.of("primaryMuscles", "secondaryMuscles");
+    private final List<String> flatEntries = List.of("force", "mechanic", "equipment", "category");
+    private final List<String> arrayEntries = List.of("primaryMuscles", "secondaryMuscles");
 
 
 
     public Document aggreagateUnique(String name){
-        TypedAggregation<ExerciseDb> aggregation = Aggregation.newAggregation(
-                ExerciseDb.class,
+        TypedAggregation<ExerciseDbModel> aggregation = Aggregation.newAggregation(
+                ExerciseDbModel.class,
                 arrayEntries.contains(name) ?
                         Aggregation
                                 .unwind(name) :
@@ -43,13 +39,13 @@ public class ExerciseDbResource {
                         .andExclude("_id")
                         .andInclude("labels")
         );
-        AggregationResults<ExerciseDb> uniqueResult = mongoTemplate.aggregate(aggregation, ExerciseDb.class);
+        AggregationResults<ExerciseDbModel> uniqueResult = mongoTemplate.aggregate(aggregation, ExerciseDbModel.class);
         return uniqueResult.getRawResults();
     }
 
     public Document aggregateCountFlat(String name){
-        TypedAggregation<ExerciseDb> aggregation = Aggregation.newAggregation(
-                ExerciseDb.class,
+        TypedAggregation<ExerciseDbModel> aggregation = Aggregation.newAggregation(
+                ExerciseDbModel.class,
                 Aggregation
                         .group(name)
                         .count()
@@ -59,12 +55,12 @@ public class ExerciseDbResource {
                         .and(name)
                         .previousOperation());
 
-        AggregationResults<ExerciseDb> result = mongoTemplate.aggregate(aggregation, ExerciseDb.class);
+        AggregationResults<ExerciseDbModel> result = mongoTemplate.aggregate(aggregation, ExerciseDbModel.class);
         return result.getRawResults();
     }
 
     public Document aggregateCountArray(String name){
-        TypedAggregation<ExerciseDb> aggregation = Aggregation.newAggregation(ExerciseDb.class,
+        TypedAggregation<ExerciseDbModel> aggregation = Aggregation.newAggregation(ExerciseDbModel.class,
                 Aggregation
                         .unwind(name),
                 Aggregation
@@ -75,7 +71,7 @@ public class ExerciseDbResource {
                         .project("count")
                         .and(name)
                         .previousOperation());
-        AggregationResults<ExerciseDb> result = mongoTemplate.aggregate(aggregation, ExerciseDb.class);
+        AggregationResults<ExerciseDbModel> result = mongoTemplate.aggregate(aggregation, ExerciseDbModel.class);
         return result.getRawResults();
     }
 

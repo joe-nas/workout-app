@@ -1,4 +1,4 @@
-package io.github.joenas.workoutapp.model.user;
+package io.github.joenas.workoutapp.user.model;
 enum PreferredUnit {
     METRIC, IMPERIAL
 }

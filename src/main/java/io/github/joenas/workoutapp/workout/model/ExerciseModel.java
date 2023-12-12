@@ -1,14 +1,14 @@
-package io.github.joenas.workoutapp.model.workout;
+package io.github.joenas.workoutapp.workout.model;
 
 import java.util.List;
 
-public class Exercise {
+public class ExerciseModel {
 
 
     private String exerciseName;
-    private List<WorkoutSet> sets;
+    private List<WorkoutSetModel> sets;
 
-    public Exercise(String exerciseName, List<WorkoutSet> sets) {
+    public ExerciseModel(String exerciseName, List<WorkoutSetModel> sets) {
         this.exerciseName = exerciseName;
         this.sets = sets;
     }
@@ -21,11 +21,11 @@ public class Exercise {
         this.exerciseName = exerciseName;
     }
 
-    public List<WorkoutSet> getSets() {
+    public List<WorkoutSetModel> getSets() {
         return sets;
     }
 
-    public void setSets(List<WorkoutSet> sets) {
+    public void setSets(List<WorkoutSetModel> sets) {
         this.sets = sets;
     }
 
