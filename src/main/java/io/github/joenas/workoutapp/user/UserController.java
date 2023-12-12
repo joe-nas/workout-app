@@ -61,7 +61,6 @@ public class UserController {
     public ResponseEntity<List<WorkoutModel>> retrieveWorkoutsByOauthId(@PathVariable String oauthId) {
         logger.debug("🏋️🏋️🏋️ Finding workouts from user with oauthId: {}", oauthId);
         List<WorkoutModel> workouts = userService.findWorkoutsByOauthId(oauthId);
-        List<Workout> workouts = userService.findWorkoutsByOauthId(oauthId);
         if (workouts == null) {
             logger.debug("🏋️🏋️🏋️ No workouts found from user with oauthId: {}", oauthId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -100,20 +99,13 @@ public class UserController {
         logger.debug("🥩🥩🥩 Trying to create user: {}", user.toString());
         UserModel newUser = userRepository.save(
                 new UserModel(
-        User userExists = userRepository.findByOauthId(user.getOauthId());
-        if(userExists != null) {
-            logger.debug("🥩🥩🥩 User with oauthId: {} already exists", user.getOauthId());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        User newUser = userRepository.save(
-                new User(
                         user.getUsername(),
                         user.getEmail(),
                         user.getOauthId(),
                         user.getOauthDetails()
                 )
         );
-        logger.debug("🥩🥩🥩 The newUser is: {}", newUser);
+        logger.debug("🥩🥩🥩 The newUser is: {}", newUser.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
