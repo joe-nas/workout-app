@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 
 /**
@@ -67,10 +66,13 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
                 UserModel user = userRepository.findByOauthId(sub);
 
                 if (user != null && user.getOauthId().equals(sub)) {
-                    Authentication authentication = new JwtAuthenticationToken(jwt, List.of(
-//                            new SimpleGrantedAuthority("ROLE_USER")), user.getOauthId());
-                            new SimpleGrantedAuthority(user.getUserRoles().get(0).toString())), user.getOauthId());
+                    Authentication authentication = new JwtAuthenticationToken(
+                            jwt,
+                            user.getUserRoles().stream().map(role -> new SimpleGrantedAuthority(role.toString())).toList(),
+                            user.getOauthId());
+//                            new SimpleGrantedAuthority(user.getUserRoles().get(0).toString())), user.getOauthId());getOauthId
                     logger.debug("created authentication object: {}", authentication);
+                    logger.debug("🎈🎈🎈created authentication object with authorities: {}", authentication.getAuthorities().toString());
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
