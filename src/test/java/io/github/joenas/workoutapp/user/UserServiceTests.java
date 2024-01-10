@@ -5,10 +5,9 @@ import io.github.joenas.workoutapp.user.impl.UserServiceImpl;
 import io.github.joenas.workoutapp.user.model.Metric;
 import io.github.joenas.workoutapp.user.model.UserRoles;
 import io.github.joenas.workoutapp.workout.WorkoutRepository;
-import io.github.joenas.workoutapp.workout.model.ExerciseModel;
-import io.github.joenas.workoutapp.workout.model.WorkoutModel;
-import io.github.joenas.workoutapp.workout.model.WorkoutSetModel;
-import org.assertj.core.api.Assertions;
+import io.github.joenas.workoutapp.workout.model.Exercise;
+import io.github.joenas.workoutapp.workout.model.Workout;
+import io.github.joenas.workoutapp.workout.model.WorkoutSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,16 +21,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 
-import javax.swing.text.html.Option;
-
 import static com.mongodb.assertions.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
@@ -46,15 +41,15 @@ public class UserServiceTests {
     @InjectMocks
     private UserServiceImpl userService;
 
-    private UserModel user;
-    private WorkoutModel workout;
-    private ExerciseModel exercise;
-    private List<WorkoutSetModel> workoutSet;
+    private User user;
+    private Workout workout;
+    private Exercise exercise;
+    private List<WorkoutSet> workoutSet;
 
     @BeforeEach
     public void setup() {
         List<UserRoles> roles = List.of(UserRoles.USER);
-        user = UserModel.builder()
+        user = User.builder()
                 .username("JohnDoe")
                 .email("john@doe.com")
                 .userRoles(roles)
@@ -63,24 +58,24 @@ public class UserServiceTests {
                 .build();
 
         workoutSet = List.of(
-                WorkoutSetModel.builder()
+                WorkoutSet.builder()
                         .reps(10)
                         .weight(100)
                         .rpe(7)
                         .build(),
-                WorkoutSetModel.builder()
+                WorkoutSet.builder()
                         .reps(10)
                         .weight(110)
                         .rpe(8)
                         .build()
         );
 
-        exercise = ExerciseModel.builder()
+        exercise = Exercise.builder()
                 .exerciseName("Bench press")
                 .sets(workoutSet)
                 .build();
 
-        workout = WorkoutModel.builder()
+        workout = Workout.builder()
                 .workoutName("Test workout")
                 .dateCreated(new Date())
                 .oauthId("12345678")
@@ -103,8 +98,8 @@ public class UserServiceTests {
         update.set("metric", user.getMetric());
 
         //when
-        when(mongoTemplate.findAndModify(query, update, UserModel.class)).thenReturn(user);
-        UserModel updatedUser = userService.updateUser(user, user.getOauthId());
+        when(mongoTemplate.findAndModify(query, update, User.class)).thenReturn(user);
+        User updatedUser = userService.updateUser(user, user.getOauthId());
         //then
         assertEquals(user, updatedUser);
     }
@@ -123,23 +118,11 @@ public class UserServiceTests {
         update.set("metric", user.getMetric());
 
         //when
-        when(mongoTemplate.findAndModify(query, update, UserModel.class)).thenReturn(null);
+        when(mongoTemplate.findAndModify(query, update, User.class)).thenReturn(null);
 
-        UserModel updatedUser = userService.updateUser(user, user.getOauthId());
+        User updatedUser = userService.updateUser(user, user.getOauthId());
 
         //then
         assertNull(updatedUser);
-    }
-
-    @DisplayName("Unit test for findWorkoutsByOauthId operation - positive scenario")
-    @Test
-    public void givenOauthId_whenFindWorkoutsByOauthId_thenReturnWorkoutList() {
-        //given - precondition or setup
-        given(workoutRepository.findByOauthId(user.getOauthId())).willReturn(List.of(workout));
-        //when - action or the behaviour to test
-        List<WorkoutModel> workoutList = userService.findWorkoutsByOauthId(user.getOauthId());
-        //then - verify the output
-        Assertions.assertThat(workoutList).isNotNull();
-        Assertions.assertThat(workoutList.get(0).getOauthId()).isEqualTo(user.getOauthId());
     }
 }

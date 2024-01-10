@@ -3,23 +3,17 @@ package io.github.joenas.workoutapp.user;
 import io.github.joenas.workoutapp.MongoDbTestConfig;
 import io.github.joenas.workoutapp.user.model.Metric;
 import io.github.joenas.workoutapp.user.model.UserRoles;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static io.github.joenas.workoutapp.MongoDbTestConfig.mongoDBContainer;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.willDoNothing;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +29,7 @@ public class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository;
 
-    private UserModel user;
+    private User user;
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
@@ -50,7 +44,7 @@ public class UserRepositoryTests {
     @BeforeEach
     public void setup() {
         List<UserRoles> roles = List.of(UserRoles.USER);
-        user = UserModel.builder()
+        user = User.builder()
                 .username("JohnDoe")
                 .email("john@doe.com")
                 .userRoles(roles)
@@ -61,7 +55,8 @@ public class UserRepositoryTests {
 
     @AfterEach
     public void tearDown() {
-        mongoTemplate.dropCollection(UserModel.class);
+
+        mongoTemplate.dropCollection(User.class);
     }
 
     @DisplayName("Integration test for saving new user")
@@ -71,7 +66,7 @@ public class UserRepositoryTests {
         // setup
 
         //when - action or the behaviour to test
-        UserModel savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         //then - verify the output
         assertThat(savedUser).isNotNull();
@@ -82,10 +77,10 @@ public class UserRepositoryTests {
     @Test
     public void givenEmployeeList_whenFindByOauthId_thenReturnUser() {
         //given - precondition or setup
-        UserModel savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         //when - action or the behaviour to test
-        UserModel foundUser = userRepository.findByOauthId(savedUser.getOauthId());
+        User foundUser = userRepository.findByOauthId(savedUser.getOauthId());
         //then - verify the output
         assertThat(foundUser).isNotNull();
         assertThat(foundUser.getOauthId()).isEqualTo(savedUser.getOauthId());
@@ -96,7 +91,7 @@ public class UserRepositoryTests {
     public void givenEmployeeList_whenFindAll_thenReturnEmployeeListObject() {
         //given - precondition or setup
         userRepository.save(user);
-        UserModel user1 = UserModel.builder()
+        User user1 = User.builder()
                 .username("JaneDoe")
                 .email("jane@doe.com")
                 .oauthId("123456789")
@@ -106,7 +101,7 @@ public class UserRepositoryTests {
         userRepository.save(user1);
 
         //when - action or the behaviour to test
-        List<UserModel> userListDb = userRepository.findAll();
+        List<User> userListDb = userRepository.findAll();
 
         //then - verify the output
         assertThat(userListDb).isNotNull();
@@ -120,15 +115,15 @@ public class UserRepositoryTests {
 
     @DisplayName("Integration test for update operation")
     @Test
-    public void givenUserObject_whenUpdateUpser_thenReturnUpdatedUser() {
+    public void givenUserObject_whenUpdateUser_thenReturnUpdatedUser() {
         //given - precondition or setup
         userRepository.save(user);
         //when - action or the behaviour to test
-        UserModel userToUpdate = userRepository.findByOauthId(user.getOauthId());
+        User userToUpdate = userRepository.findByOauthId(user.getOauthId());
         userToUpdate.setUsername("JaneDoe");
         userToUpdate.setEmail("jane@doe.com");
         userToUpdate.setMetric(Metric.LBS);
-        UserModel updatedUser = userRepository.save(userToUpdate);
+        User updatedUser = userRepository.save(userToUpdate);
         //then - verify the output
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getUsername()).isEqualTo(userToUpdate.getUsername());
@@ -144,7 +139,7 @@ public class UserRepositoryTests {
         userRepository.save(user);
         //when
         userRepository.deleteById(user.getId());
-        Optional<UserModel> userOptional = userRepository.findById(user.getId());
+        Optional<User> userOptional = userRepository.findById(user.getId());
         //then
         assertThat(userOptional).isEmpty();
     }
@@ -156,7 +151,7 @@ public class UserRepositoryTests {
         userRepository.save(user);
         //when - action or the behaviour to test
         userRepository.deleteByOauthId(user.getOauthId());
-        Optional<UserModel> userOptional = userRepository.findById(user.getId());
+        Optional<User> userOptional = userRepository.findById(user.getId());
         //then - verify the output
         assertThat(userOptional).isEmpty();
     }
