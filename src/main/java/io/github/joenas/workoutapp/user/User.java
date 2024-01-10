@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserModel {
+public class User {
 
     @Id
     private @MongoId String id;
@@ -30,7 +30,7 @@ public class UserModel {
     private URL profilePictureUrl;
     private OauthDetails oauthDetails;
 
-    public UserModel(String username, String email, String oauthId, OauthDetails oauthDetails) {
+    public User(String username, String email, String oauthId, OauthDetails oauthDetails) {
 
         this.username = username;
         this.email = email;

@@ -1,7 +1,7 @@
 package io.github.joenas.workoutapp.workout;
 
 
-import io.github.joenas.workoutapp.workout.model.WorkoutModel;
+import io.github.joenas.workoutapp.workout.model.Workout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,20 +26,20 @@ public class WorkoutController {
 
 //    Not authenticated
     @GetMapping("/")
-    public List<WorkoutModel> testall() {
+    public List<Workout> testall() {
         return workoutRepository.findAll();
     }
 
 //   Authenticated
     @GetMapping("/workouts")
-    public List<WorkoutModel> getAllWorkouts() {
+    public List<Workout> getAllWorkouts() {
         return workoutRepository.findAll();
     }
 
     @PostMapping("/workouts/create")
-    public ResponseEntity<WorkoutModel> createWorkout(@RequestBody WorkoutModel workout) {
+    public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout) {
         logger.info("Creating workout for: {}",workout.getOauthId());
-        WorkoutModel savedWorkout = workoutRepository.save(workout);
+        Workout savedWorkout = workoutRepository.save(workout);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
 

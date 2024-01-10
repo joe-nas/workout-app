@@ -1,18 +1,16 @@
 package io.github.joenas.workoutapp.workout.impl;
 
-import io.github.joenas.workoutapp.user.UserModel;
+import io.github.joenas.workoutapp.user.User;
 import io.github.joenas.workoutapp.user.UserRepository;
+import io.github.joenas.workoutapp.user.exceptions.UserNotFoundException;
 import io.github.joenas.workoutapp.workout.WorkoutRepository;
 import io.github.joenas.workoutapp.workout.WorkoutService;
-import io.github.joenas.workoutapp.workout.model.ExerciseModel;
-import io.github.joenas.workoutapp.workout.model.WorkoutModel;
-import io.github.joenas.workoutapp.workout.model.WorkoutSetModel;
+import io.github.joenas.workoutapp.workout.model.Workout;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,48 +21,26 @@ public class WorkoutServiceImpl implements WorkoutService {
     WorkoutRepository workoutRepository;
     UserRepository userRepository;
 
-    public List<WorkoutModel> getAllWorkouts(){
-        return workouts;
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository) {
+        this.workoutRepository = workoutRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public WorkoutModel saveWorkout(WorkoutModel workout, String oauthId) {
-            UserModel user = userRepository.findByOauthId(oauthId);
-            workout.setUser(user);
-            workoutRepository.save(workout);
-            return workout;
+    public Workout saveWorkout(Workout workout, String oauthId) {
+        User user = userRepository.findByOauthId(oauthId);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        workout.setUser(user);
+        workoutRepository.save(workout);
+        return workout;
     }
 
     @Override
-    public WorkoutModel getWorkoutById(int id) {
-        return null;
+    public List<Workout> findWorkoutsByOauthId(String oauthId) {
+
+        return workoutRepository.findByOauthId(oauthId);
     }
 
-    private static final List<WorkoutModel> workouts = new ArrayList<>();
-
-
-    static {
-        workouts.add(new WorkoutModel("jonas", "leg day", new Date(),
-                List.of(new ExerciseModel("Rack Curls",
-                                List.of(new WorkoutSetModel(1, 10, 80, false),
-                                        new WorkoutSetModel(2, 10, 90, false),
-                                        new WorkoutSetModel(3, 10, 100, false))),
-                        new ExerciseModel("Reverse Curls",
-                                List.of(new WorkoutSetModel(1, 10, 100, false),
-                                        new WorkoutSetModel(2, 10, 110, false),
-                                        new WorkoutSetModel(3, 10, 120, false))
-                        )
-                )));
-        workouts.add(new WorkoutModel("jonas", "back dat", new Date(),
-                List.of(new ExerciseModel("Hammer Curls",
-                                List.of(new WorkoutSetModel(1, 10, 80, false),
-                                        new WorkoutSetModel(2, 10, 90, false),
-                                        new WorkoutSetModel(3, 10, 100, false))),
-                        new ExerciseModel("skull crusher",
-                                List.of(new WorkoutSetModel(1, 10, 100, false),
-                                        new WorkoutSetModel(2, 10, 110, false),
-                                        new WorkoutSetModel(3, 10, 120, false))
-                        )
-                )));
-    }
 }

@@ -2,7 +2,7 @@ package io.github.joenas.workoutapp.user;
 
 import io.github.joenas.workoutapp.user.model.Metric;
 import io.github.joenas.workoutapp.workout.WorkoutService;
-import io.github.joenas.workoutapp.workout.model.WorkoutModel;
+import io.github.joenas.workoutapp.workout.model.Workout;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,11 @@ import java.util.List;
 public class UserController {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
-    UserRepository userRepository;
     UserService userService;
     WorkoutService workoutService;
 
     public UserController(UserRepository userRepository, UserService userService, WorkoutService workoutService) {
-        this.userRepository = userRepository;
+
         this.userService = userService;
         this.workoutService = workoutService;
     }
@@ -36,9 +35,9 @@ public class UserController {
      * @return a ResponseEntity containing the user if found, or a 404 status code if not
      */
     @GetMapping("/user/{oauthId}")
-    public ResponseEntity<UserModel> retrieveUserByOauthId(Authentication auth, @PathVariable String oauthId) {
+    public ResponseEntity<User> retrieveUserByOauthId(Authentication auth, @PathVariable String oauthId) {
         logger.debug("Retrieving user with {}", auth);
-        UserModel user = userRepository.findByOauthId(oauthId);
+        User user = userService.findUserByOauthId(oauthId);
         if (user == null) {
             logger.debug("No user with oauthId: {}", oauthId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -55,9 +54,9 @@ public class UserController {
      * @return a ResponseEntity containing the list of workouts if found, or a 404 status code if not
      */
     @GetMapping("/user/{oauthId}/workouts")
-    public ResponseEntity<List<WorkoutModel>> retrieveWorkoutsByOauthId(@PathVariable String oauthId) {
+    public ResponseEntity<List<Workout>> retrieveWorkoutsByOauthId(@PathVariable String oauthId) {
         logger.debug("🏋️🏋️🏋️ Finding workouts from user with oauthId: {}", oauthId);
-        List<WorkoutModel> workouts = userService.findWorkoutsByOauthId(oauthId);
+        List<Workout> workouts = workoutService.findWorkoutsByOauthId(oauthId);
         if (workouts == null) {
             logger.debug("🏋️🏋️🏋️ No workouts found from user with oauthId: {}", oauthId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -75,10 +74,10 @@ public class UserController {
      * @return a ResponseEntity containing the created workout if successful, or a 404 status code if the user was not found
      */
     @PostMapping("/user/{oauthId}/workouts")
-    public String createUserWorkout(@PathVariable String oauthId, @RequestBody WorkoutModel workout) {
+    public String createUserWorkout(@PathVariable String oauthId, @RequestBody Workout workout) {
         logger.debug("Creating workout for user with oauthId: {}", oauthId);
         logger.debug("Workout: {}", workout.toString());
-        WorkoutModel newWorkout = workoutService.saveWorkout(workout, oauthId);
+        Workout newWorkout = workoutService.saveWorkout(workout, oauthId);
         return "Creating workout for user with oauthId: " + oauthId + " and workout: " + newWorkout.toString();
     }
 
@@ -91,14 +90,14 @@ public class UserController {
      */
     // Needs validation
     @PostMapping("/user/create")
-    public ResponseEntity<UserModel> createUser(@RequestBody UserModel user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         logger.debug("🥩🥩🥩 Trying to create user: {}", user.toString());
-        if (userRepository.findByOauthId(user.getOauthId()) != null) {
+        if (userService.findUserByOauthId(user.getOauthId()) != null) {
             logger.debug("🥩🥩🥩 User with oauthId: {} already exists", user.getOauthId());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        UserModel newUser = userRepository.save(
-                UserModel.builder()
+        User newUser = userService.saveUser(
+                User.builder()
                         .username(user.getUsername())
                         .email(user.getEmail())
                         .userRoles(user.getUserRoles())
@@ -119,7 +118,7 @@ public class UserController {
     @GetMapping("/user/check/{oauthId}")
     public ResponseEntity<Void> checkIfUserExists(@PathVariable String oauthId) {
         logger.debug("🦝🦝🦝🐮🐮🐮Checking if user with oauthId: {} exists", oauthId);
-        UserModel user = userRepository.findByOauthId(oauthId);
+        User user = userService.findUserByOauthId(oauthId);
         if (user == null) {
             logger.debug("🦝🦝🦝🦝🦝🦝User with oauthId: {} does not exist", oauthId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -134,7 +133,7 @@ public class UserController {
     @GetMapping("/security")
     @PreAuthorize("hasRole('USER')")
     public String securityTest(Authentication auth) {
-        logger.debug(userRepository.findByOauthId(auth.getName()).toString());
+        logger.debug(userService.findUserByOauthId(auth.getName()).toString());
         logger.debug("Security test: {}", auth);
         return "Security test";
     }
@@ -148,10 +147,10 @@ public class UserController {
      */
     @PutMapping("/user/{oauthId}/profile")
     @PreAuthorize("hasRole('USER')")
-    public String updateUser(@PathVariable String oauthId, @RequestBody UserModel user) {
+    public String updateUser(@PathVariable String oauthId, @RequestBody User user) {
         logger.debug("Updating user with oauthId: {}", oauthId);
         logger.debug("User: {}", user.toString());
-        UserModel updatedUser = userService.updateUser(user, oauthId);
+        User updatedUser = userService.updateUser(user, oauthId);
         return "Updating user with oauthId: " + oauthId + " and user: " + updatedUser.toString();
     }
 }

@@ -1,16 +1,14 @@
 package io.github.joenas.workoutapp.workout;
 
-import io.github.joenas.workoutapp.user.UserModel;
-import io.github.joenas.workoutapp.workout.model.WorkoutModel;
+import io.github.joenas.workoutapp.workout.model.Workout;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface WorkoutRepository extends MongoRepository<WorkoutModel, String>{
+public interface WorkoutRepository extends MongoRepository<Workout, String>{
 
-    List<WorkoutModel> findByOauthId(String oauthId);
+    List<Workout> findByOauthId(String oauthId);
     void deleteById(String id);
 }
