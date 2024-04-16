@@ -223,7 +223,7 @@ POST /api/users/123234345/workouts
           "weight": 70,
           "rpe": 9,
           "isDone": true
-        },
+        }
       ]
     },
     {
