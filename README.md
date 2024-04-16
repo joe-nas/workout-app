@@ -145,58 +145,58 @@ Retrieves all workouts for a user by oauthID.
 GET /api/users/123234345/workouts
 
 [
-  {
-  "_id": "653bff461dabdsdf365c1d614d",
-  "user": {
-    "$ref": "users",
-    "$id": "653a844a532409de9064fbb138a"
-  },
-  "oauthId": "1154006894960655",
-  "workoutName": "Monday Morning Workout",
-  "dateCreated": {
-    "date": "2023-10-27T17:35:53.212Z"
-  },
-  "exercises": [
     {
-      "exerciseName": "Bench Press",
-      "sets": [
-        {
-          "setNumber": 1,
-          "reps": 8,
-          "weight": 70,
-          "rpe": 8,
-          "isDone": true
+        "_id": "653bff461dabdsdf365c1d614d",
+        "user": {
+            "$ref": "users",
+            "$id": "653a844a532409de9064fbb138a"
         },
-        {
-          "setNumber": 2,
-          "reps": 8,
-          "weight": 70,
-          "rpe": 9,
-          "isDone": true
-        }
-      ]
-    },
-    {
-      "exerciseName": "RDL",
-      "sets": [
-        {
-          "setNumber": 1,
-          "reps": 15,
-          "weight": 90,
-          "rpe": 6,
-          "isDone": false
+        "oauthId": "1154006894960655",
+        "workoutName": "Monday Morning Workout",
+        "dateCreated": {
+            "date": "2023-10-27T17:35:53.212Z"
         },
-        {
-          "setNumber": 2,
-          "reps": 15,
-          "weight": 90,
-          "rpe": 7,
-          "isDone": false
-        }
-      ]
+        "exercises": [
+            {
+                "exerciseName": "Bench Press",
+                "sets": [
+                    {
+                        "setNumber": 1,
+                        "reps": 8,
+                        "weight": 70,
+                        "rpe": 8,
+                        "isDone": true
+                    },
+                    {
+                        "setNumber": 2,
+                        "reps": 8,
+                        "weight": 70,
+                        "rpe": 9,
+                        "isDone": true
+                    }
+                ]
+            },
+            {
+                "exerciseName": "RDL",
+                "sets": [
+                    {
+                        "setNumber": 1,
+                        "reps": 15,
+                        "weight": 90,
+                        "rpe": 6,
+                        "isDone": false
+                    },
+                    {
+                        "setNumber": 2,
+                        "reps": 15,
+                        "weight": 90,
+                        "rpe": 7,
+                        "isDone": false
+                    }
+                ]
+            }
+        ]
     }
-  ]
-  }
 ]
 ```
 ```http
